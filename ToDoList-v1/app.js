@@ -1,5 +1,6 @@
 const express=require("express");
 const bodyPareser=require("body-parser");
+const mongoose=require("mongoose");
 
 const app=express();
 
@@ -8,8 +9,36 @@ app.set('view engine', 'ejs');
 app.use(bodyPareser.urlencoded({extended:true}));
 app.use(express.static("public"));
 
-let items=[];
-let works=[];
+mongoose.connect("mongodb://localhost:27017/todolistDB",{useNewUrlParser: true});
+const itemSchema=new mongoose.Schema(
+    {
+        name:String
+    }
+);
+
+const Item=mongoose.model("Item",itemSchema);
+const item1=new Item({
+    name:"Welcome To Your ToDoLiist!"
+});
+const item2=new Item({
+    name: "Hit + button to add a new item"
+});
+const item3=new Item({
+    name: "<-- Hit this to delete"
+});
+const defaultItems=[item1,item2,item3];
+
+Item.insertMany(defaultItems,function(err)
+{
+    if(err)
+    console.log(err);
+    else
+    console.log("Succesfully stored");
+});
+ 
+
+// let items=[];
+// let works=[];
 
 app.get("/",function(req,res)
 {
@@ -20,7 +49,7 @@ app.get("/",function(req,res)
         month: "long"
     };
     let day=today.toLocaleDateString("en-us",option);
-    res.render("list",{listTitle: day, allItems: items});
+    res.render("list",{listTitle: "Today", allItems: items});
     
 })
 
