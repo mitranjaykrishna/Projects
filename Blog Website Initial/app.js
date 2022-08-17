@@ -69,7 +69,7 @@ app.post('/compose',function(req,res)   //taking form input and save in posts[] 
 
 // ----------------------Express Routing -----------------------------------------
 
-app.get('/posts/:postName',function(req,res)   // using ecpress routing for dynamic page creation for each content
+app.get('/posts/:postName',function(req,res)   // using express routing for dynamic page creation for each content
 {
   const reqParam=_.lowerCase(req.params.postName);
   
